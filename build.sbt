@@ -1,14 +1,15 @@
-import Dependencies._
+import Dependencies.projectDependencies
 
 ThisBuild / scalaVersion     := "2.13.10"
 ThisBuild / version          := "0.1.0-SNAPSHOT"
 ThisBuild / organization     := "com.example"
 ThisBuild / organizationName := "example"
 
-lazy val root = (project in file("."))
-  .settings(
-    name := "ICC-2023-06-17",
-    libraryDependencies += munit % Test
-  )
+val `mocks-in-scala` = (project in file("./modules/mocks-in-scala"))
+  .settings(libraryDependencies ++= projectDependencies)
 
-// See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
+val root = (project in file("."))
+  .settings(
+    name := "ICC-2023-06-17"
+  )
+  .aggregate(`mocks-in-scala`)
