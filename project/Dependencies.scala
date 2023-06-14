@@ -11,9 +11,12 @@ object Dependencies {
   val Testing = Seq(
     "org.scalactic"     %% "scalactic"       % scalaTestV,
     "org.scalatest"     %% "scalatest"       % scalaTestV               % Test,
-    "org.scalatestplus" %% "scalacheck-1-17" % scalaTestPlusScalaCheckV % Test,
-    "org.mockito"        % "mockito-core"    % mockitoV                 % Test,
-    "org.scalatestplus" %% "mockito-4-11"    % scalaTestPlusMockitoV    % Test
+    "org.scalatestplus" %% "scalacheck-1-17" % scalaTestPlusScalaCheckV % Test
+  )
+
+  val Mockito = Seq(
+    "org.mockito"        % "mockito-core" % mockitoV              % Test,
+    "org.scalatestplus" %% "mockito-4-11" % scalaTestPlusMockitoV % Test
   )
 
   val Cats = Seq(

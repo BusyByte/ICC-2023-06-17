@@ -1,10 +1,14 @@
 package example.test_examples
 
-import example.Hello
 import org.scalatest.funsuite.AnyFunSuite
 
+object HelloSpec {
+  def createHelloMessage(name: String): String = s"Hello $name, nice to meet you!"
+}
+
+import HelloSpec._
 class HelloSpec extends AnyFunSuite {
   test("say hello") {
-    assertResult(Hello.greeting)("hello")
+    assertResult("Hello Jane, nice to meet you!")(createHelloMessage("Jane Doe"))
   }
 }
