@@ -1,6 +1,5 @@
-package example
+package example.slides
 
-import example.SmartNullPointerExceptionSpec.UserRepo
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.funsuite.AnyFunSuite
@@ -32,7 +31,7 @@ object SmartNullPointerExceptionSpec {
 
 }
 
-import SmartNullPointerExceptionSpec._
+import example.slides.SmartNullPointerExceptionSpec._
 class SmartNullPointerExceptionSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
   val userRepo       = mock[UserRepo]
   val eventPublisher = mock[EventPublisher]

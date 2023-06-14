@@ -1,4 +1,4 @@
-package example
+package example.slides
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
@@ -10,7 +10,6 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
 
 import java.util.UUID
-import scala.util.{Failure, Success, Try}
 
 object MatchingParametersSpec {
 
@@ -39,7 +38,7 @@ object MatchingParametersSpec {
 
 }
 
-import example.MatchingParametersSpec._
+import example.slides.MatchingParametersSpec._
 class MatchingParametersSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
   val userRepo       = mock[UserRepo]
   val eventPublisher = mock[EventPublisher]

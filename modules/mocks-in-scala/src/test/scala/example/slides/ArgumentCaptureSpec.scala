@@ -1,8 +1,9 @@
-package example
+package example.slides
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
 import cats.implicits.catsSyntaxApplicativeId
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -11,7 +12,7 @@ import org.scalatestplus.mockito.MockitoSugar
 
 import java.util.UUID
 
-object ImplicitParametersSpec {
+object ArgumentCaptureSpec {
 
   case class LoggingContext(values: Map[String, String])
   case class UserId(value: UUID)      extends AnyVal
@@ -49,38 +50,42 @@ object ImplicitParametersSpec {
 
 }
 
-import example.ImplicitParametersSpec._
-class ImplicitParametersSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
+import example.slides.ArgumentCaptureSpec._
+class ArgumentCaptureSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
   val userRepo       = mock[UserRepo]
   val eventPublisher = mock[EventPublisher]
   val log            = mock[Logging]
   val service        = new UserService(eventPublisher, userRepo, log)
   implicit val lc    = LoggingContext(Map())
 
-  when(log.debug(any[String])).thenReturn(IO.unit)
+  when(log.debug(any[String])(any[LoggingContext])).thenReturn(IO.unit)
 
   override def beforeEach(): Unit = {
     reset(userRepo, eventPublisher)
   }
 
-  test("doesn't like value implicit values") {
-    val userId    = UserId(UUID.randomUUID())
+  test("argument captures are a symptom of poor functions which don't return values") {
     val firstName = FirstName("john")
     val lastName  = LastName("doe")
 
-    when(userRepo.createNewUser(FirstName(any[String]), LastName(any[String])))
-      .thenReturn(User(userId, firstName, lastName).pure[IO])
-    when(eventPublisher.publishUserCreated(UserId(any[UUID]))).thenReturn(IO.unit)
+    val userIdCapture: ArgumentCaptor[UUID] = ArgumentCaptor.forClass(classOf[UUID])
+
+    when(userRepo.createNewUser(FirstName(any[String]), LastName(any[String]))(any[LoggingContext]))
+      .thenReturn(User(UserId(UUID.randomUUID()), firstName, lastName).pure[IO])
+    when(eventPublisher.publishUserCreated(UserId(userIdCapture.capture()))(any[LoggingContext]))
+      .thenReturn(IO.unit)
 
     val userResult: IO[User] = service.createUser(firstName, lastName)
 
     userResult.attempt.unsafeRunSync() match {
       case Right(user) =>
-        verify(userRepo).createNewUser(FirstName(any[String]), LastName(any[String]))
-        verify(eventPublisher).publishUserCreated(UserId(any[UUID]))
+        verify(userRepo).createNewUser(FirstName(any[String]), LastName(any[String]))(
+          any[LoggingContext]
+        )
+        verify(eventPublisher).publishUserCreated(UserId(any[UUID]))(any[LoggingContext])
         assertResult(firstName)(user.first)
         assertResult(lastName)(user.last)
-        assertResult(userId)(user.id)
+        assertResult(UserId(userIdCapture.getValue))(user.id)
     }
   }
 }

@@ -1,4 +1,4 @@
-package example
+package example.slides
 
 import cats.effect.IO
 import cats.effect.unsafe.implicits.global
@@ -26,7 +26,7 @@ object EffectCorrectnessSpec {
 
 }
 
-import example.EffectCorrectnessSpec._
+import example.slides.EffectCorrectnessSpec._
 class EffectCorrectnessSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
   val messagePublisher = mock[MessagePublisher]
 

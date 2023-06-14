@@ -1,5 +1,6 @@
-package example
+package example.test_examples
 
+import example.Hello
 import org.scalatest.funsuite.AnyFunSuite
 
 class HelloSpec extends AnyFunSuite {
