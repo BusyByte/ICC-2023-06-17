@@ -7,6 +7,7 @@ ThisBuild / organizationName := "example"
 
 val `mocks-in-scala` = (project in file("./modules/mocks-in-scala"))
   .settings(libraryDependencies ++= projectDependencies ++ Mockito)
+  .disablePlugins(TpolecatPlugin)
 
 val `fakes-in-scala` = (project in file("./modules/fakes-in-scala"))
   .settings(libraryDependencies ++= projectDependencies)

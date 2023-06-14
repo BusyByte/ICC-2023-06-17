@@ -3,8 +3,11 @@ import cats.Show
 
 import java.util.UUID
 
-package object models {
+package models {
   final case class LoggingContext(values: Map[String, String])
+  object LoggingContext {
+    val EMPTY = LoggingContext(Map())
+  }
   final case class UserId(value: UUID)      extends AnyVal
   final case class FirstName(value: String) extends AnyVal
   object FirstName {

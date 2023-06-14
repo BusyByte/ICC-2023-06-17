@@ -5,7 +5,7 @@ import cats.effect.unsafe.implicits.global
 import cats.implicits.catsSyntaxApplicativeId
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Inside}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
 
@@ -50,7 +50,7 @@ object FinalClassesSpec {
 }
 
 import example.slides.FinalClassesSpec._
-class FinalClassesSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
+class FinalClassesSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach with Inside {
   val userRepo       = mock[UserRepo]
   val eventPublisher = mock[EventPublisher]
   val log            = mock[Logging]
@@ -74,13 +74,12 @@ class FinalClassesSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfter
 
     val userResult: IO[User] = service.createUser(firstName, lastName)
 
-    userResult.attempt.unsafeRunSync() match {
-      case Right(user) =>
-        verify(userRepo).createNewUser(any[FirstName], any[LastName])(any[LoggingContext])
-        verify(eventPublisher).publishUserCreated(any[UserId])(any[LoggingContext])
-        assertResult(firstName)(user.first)
-        assertResult(lastName)(user.last)
-        assertResult(userId)(user.id)
+    inside(userResult.attempt.unsafeRunSync()) { case Right(user) =>
+      verify(userRepo).createNewUser(any[FirstName], any[LastName])(any[LoggingContext])
+      verify(eventPublisher).publishUserCreated(any[UserId])(any[LoggingContext])
+      assertResult(firstName)(user.first)
+      assertResult(lastName)(user.last)
+      assertResult(userId)(user.id)
     }
   }
 }

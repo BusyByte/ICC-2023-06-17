@@ -6,7 +6,7 @@ import cats.implicits.catsSyntaxApplicativeId
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Inside}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
 
@@ -51,7 +51,11 @@ object ArgumentCaptureSpec {
 }
 
 import example.slides.ArgumentCaptureSpec._
-class ArgumentCaptureSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
+class ArgumentCaptureSpec
+    extends AnyFunSuite
+    with MockitoSugar
+    with BeforeAndAfterEach
+    with Inside {
   val userRepo       = mock[UserRepo]
   val eventPublisher = mock[EventPublisher]
   val log            = mock[Logging]
@@ -77,15 +81,14 @@ class ArgumentCaptureSpec extends AnyFunSuite with MockitoSugar with BeforeAndAf
 
     val userResult: IO[User] = service.createUser(firstName, lastName)
 
-    userResult.attempt.unsafeRunSync() match {
-      case Right(user) =>
-        verify(userRepo).createNewUser(FirstName(any[String]), LastName(any[String]))(
-          any[LoggingContext]
-        )
-        verify(eventPublisher).publishUserCreated(UserId(any[UUID]))(any[LoggingContext])
-        assertResult(firstName)(user.first)
-        assertResult(lastName)(user.last)
-        assertResult(UserId(userIdCapture.getValue))(user.id)
+    inside(userResult.attempt.unsafeRunSync()) { case Right(user) =>
+      verify(userRepo).createNewUser(FirstName(any[String]), LastName(any[String]))(
+        any[LoggingContext]
+      )
+      verify(eventPublisher).publishUserCreated(UserId(any[UUID]))(any[LoggingContext])
+      assertResult(firstName)(user.first)
+      assertResult(lastName)(user.last)
+      assertResult(UserId(userIdCapture.getValue))(user.id)
     }
   }
 }

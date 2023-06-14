@@ -5,7 +5,7 @@ import cats.effect.unsafe.implicits.global
 import cats.implicits.catsSyntaxApplicativeId
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
-import org.scalatest.BeforeAndAfterEach
+import org.scalatest.{BeforeAndAfterEach, Inside}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.mockito.MockitoSugar
 
@@ -39,7 +39,11 @@ object MatchingParametersSpec {
 }
 
 import example.slides.MatchingParametersSpec._
-class MatchingParametersSpec extends AnyFunSuite with MockitoSugar with BeforeAndAfterEach {
+class MatchingParametersSpec
+    extends AnyFunSuite
+    with MockitoSugar
+    with BeforeAndAfterEach
+    with Inside {
   val userRepo       = mock[UserRepo]
   val eventPublisher = mock[EventPublisher]
   val service        = new UserService(eventPublisher, userRepo)
@@ -59,13 +63,12 @@ class MatchingParametersSpec extends AnyFunSuite with MockitoSugar with BeforeAn
 
     val userResult: IO[User] = service.createUser(firstName, lastName)
 
-    userResult.attempt.unsafeRunSync() match {
-      case Right(user) =>
-        verify(userRepo).createNewUser(any[FirstName], any[LastName])
-        verify(eventPublisher).publishUserCreated(any[UserId])
-        assertResult(firstName)(user.first)
-        assertResult(lastName)(user.last)
-        assertResult(userId)(user.id)
+    inside(userResult.attempt.unsafeRunSync()) { case Right(user) =>
+      verify(userRepo).createNewUser(any[FirstName], any[LastName])
+      verify(eventPublisher).publishUserCreated(any[UserId])
+      assertResult(firstName)(user.first)
+      assertResult(lastName)(user.last)
+      assertResult(userId)(user.id)
     }
   }
 }
