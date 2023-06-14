@@ -12,7 +12,7 @@ object HelloPropSpec {
 
 import example.test_examples.HelloPropSpec._
 class HelloPropSpec extends AnyFunSuite with ScalaCheckDrivenPropertyChecks {
-  import example.scalacheck.AbitraryInstances._
+  import example.scalacheck.ArbitraryInstances._
   test("say hello") {
     forAll { (firstName: FirstName, lastName: LastName) =>
       val helloMessage         = createHelloMessage(firstName, lastName)

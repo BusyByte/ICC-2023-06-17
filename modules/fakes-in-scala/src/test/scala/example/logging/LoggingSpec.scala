@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
 class LoggingSpec extends AnyFunSuite with ScalaCheckDrivenPropertyChecks {
-  import example.scalacheck.AbitraryInstances._
+  import example.scalacheck.ArbitraryInstances._
 
   val logging = Logging.impl
   test("should log debug") {
