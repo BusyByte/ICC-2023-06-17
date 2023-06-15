@@ -13,14 +13,20 @@ mindmapDiagram {
   .view {
     BackgroundColor #5fc08b
   }
+  .business_process {
+    BackgroundColor pink
+  }
 }
 </style>
 + Customer <<aggregate>>
 -- RegisterCustomer <<action>>
-++ CustomerAdded <<event>>
+++ IdentityVerification <<business_process>>
++++ CustomerAdded <<event>>
++++ CustomerRejected <<event>>
 + Card <<aggregate>>
 -- AddCard <<action>>
-++ CardAdded <<event>>
+++ CreditCheck <<business_process>>
++++ CardAdded <<event>>
 + Payments <<aggregate>>
 -- MakeCardPayment <<action>>
 ++ CardPayed <<event>>
@@ -29,7 +35,9 @@ mindmapDiagram {
 ++ SendCardUpgradeOffer <<action>>
 + Purchases <<aggregate>>
 -- MakeCardPurchase <<action>>
-++ CardPurchaseMade <<event>>
+++ ValidateTransaction <<business_process>>
++++ CardPurchaseMade <<event>>
++++ CardPurchaseDenied <<event>>
 + Offers <<aggregate>>
 -- CardPurchaseMade <<event>>
 ++ SendAffiliatedItemsOffer <<action>>
