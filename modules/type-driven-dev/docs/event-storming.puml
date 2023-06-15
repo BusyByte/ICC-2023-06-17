@@ -1,0 +1,36 @@
+@startmindmap
+<style>
+mindmapDiagram {
+  .aggregate {
+    BackgroundColor #ffd42d
+  }
+  .action {
+    BackgroundColor #3399fe
+  }
+  .event {
+    BackgroundColor #ff992a
+  }
+  .view {
+    BackgroundColor #5fc08b
+  }
+}
+</style>
++ Customer <<aggregate>>
+-- RegisterCustomer <<action>>
+++ CustomerAdded <<event>>
++ Card <<aggregate>>
+-- AddCard <<action>>
+++ CardAdded <<event>>
++ Payments <<aggregate>>
+-- MakeCardPayment <<action>>
+++ CardPayed <<event>>
++ Offers <<aggregate>>
+-- CardPayed <<event>>
+++ SendCardUpgradeOffer <<action>>
++ Purchases <<aggregate>>
+-- MakeCardPurchase <<action>>
+++ CardPurchaseMade <<event>>
++ Offers <<aggregate>>
+-- CardPurchaseMade <<event>>
+++ SendAffiliatedItemsOffer <<action>>
+@endmindmap
