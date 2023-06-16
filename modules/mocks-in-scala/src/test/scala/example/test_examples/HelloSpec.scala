@@ -9,6 +9,6 @@ object HelloSpec {
 import HelloSpec._
 class HelloSpec extends AnyFunSuite {
   test("say hello") {
-    assertResult("Hello Jane, nice to meet you!")(createHelloMessage("Jane Doe"))
+    assertResult("Hello Jane Doe, nice to meet you!")(createHelloMessage("Jane Doe"))
   }
 }

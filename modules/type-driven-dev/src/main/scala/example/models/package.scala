@@ -1,12 +1,14 @@
 package example
 
 package models {
+  import cats.data.NonEmptyList
+
   import java.time.Instant
   import java.util.{Currency, UUID}
 
   final case class FirstName(value: String)   extends AnyVal
   final case class LastName(value: String)    extends AnyVal
-  final case class Zip(value: String)         extends AnyVal
+  final case class ZipCode(value: String)     extends AnyVal
   final case class AddressLine(value: String) extends AnyVal
   sealed abstract class State(val name: String, val abbreviation: String)
   object State {
@@ -63,7 +65,7 @@ package models {
     case object Kansas             extends State("Kansas", "KS")
     case object Wyoming            extends State("Wyoming", "WY")
   }
-  final case class Address(lines: List[AddressLine], zip: Zip, state: State)
+  final case class Address(lines: NonEmptyList[AddressLine], zip: ZipCode, state: State)
   final case class SSN(value: String) extends AnyVal
   final case class NewCustomer(firstName: FirstName, lastName: LastName, address: Address, ssn: SSN)
   final case class CustomerId(value: UUID) extends AnyVal

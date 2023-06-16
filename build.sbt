@@ -5,6 +5,8 @@ ThisBuild / version          := "0.1.0-SNAPSHOT"
 ThisBuild / organization     := "com.example"
 ThisBuild / organizationName := "example"
 
+ThisBuild / Test / fork := true
+
 val `mocks-in-scala` = (project in file("./modules/mocks-in-scala"))
   .settings(libraryDependencies ++= projectDependencies ++ Mockito)
   .disablePlugins(TpolecatPlugin)
