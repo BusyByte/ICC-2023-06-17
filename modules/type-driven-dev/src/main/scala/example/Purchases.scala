@@ -1,9 +1,9 @@
 package example
 import example.models.actions.MakeCardPurchase
-import example.models.events.CardPurchaseMade
+import example.models.events.{CardPurchaseMade, CardPurchaseRejected}
 
 import scala.util.Try
 
 trait Purchases {
-  def makeCardPurchase(req: MakeCardPurchase.type): Try[CardPurchaseMade.type]
+  def makeCardPurchase(req: MakeCardPurchase): Try[Either[CardPurchaseRejected, CardPurchaseMade]]
 }
