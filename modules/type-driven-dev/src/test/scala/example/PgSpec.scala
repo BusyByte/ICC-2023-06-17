@@ -41,7 +41,7 @@ class PgSpec extends AnyFlatSpec with TestContainerForAll with IOChecker {
     .load()
     .migrate(): Unit
 
-  "PostgreSQL container" should "be started" in {
+  "queries" should "pass checks" in {
     withContainers { pgContainer =>
       runFlywayMigrations(pgContainer)
       check(
