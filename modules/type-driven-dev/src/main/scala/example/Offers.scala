@@ -5,6 +5,6 @@ import example.models.events.{CardPayed, CardPurchaseMade}
 import scala.util.Try
 
 trait Offers {
-  def sendUpgradeOffer(req: CardPayed.type): Try[Option[SendCardUpgradeOffer.type]]
-  def sendAffiliateOffer(req: CardPurchaseMade.type): Try[Option[SendAffiliateOffer.type]]
+  def sendUpgradeOffer(req: CardPayed): Try[Option[SendCardUpgradeOffer]]
+  def sendAffiliateOffer(req: CardPurchaseMade): Try[Option[SendAffiliateOffer]]
 }

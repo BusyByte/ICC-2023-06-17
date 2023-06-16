@@ -120,22 +120,37 @@ package models {
       merchant: Merchant
   )
 
+  final case class OfferId(value: UUID) extends AnyVal
+
   package actions {
     sealed trait Action
-    final case class RegisterCustomer(newCustomer: NewCustomer)               extends Action
-    final case class AddCard(customerId: CustomerId, newCard: NewCard)        extends Action
-    final case class MakeCardPayment(cardId: CardId, payment: PaymentRequest) extends Action
-    case object SendCardUpgradeOffer                                          extends Action
-    final case class MakeCardPurchase(request: CardPurchaseRequest)           extends Action
-    case object SendAffiliateOffer                                            extends Action
+    final case class RegisterCustomer(newCustomer: NewCustomer)                     extends Action
+    final case class AddCard(customerId: CustomerId, newCard: NewCard)              extends Action
+    final case class MakeCardPayment(cardId: CardId, payment: PaymentRequest)       extends Action
+    final case class SendCardUpgradeOffer(customerId: CustomerId, offerId: OfferId) extends Action
+    final case class MakeCardPurchase(request: CardPurchaseRequest)                 extends Action
+    final case class SendAffiliateOffer(customerId: CustomerId, offerId: OfferId)   extends Action
   }
 
   package events {
+    import example.IdentityVerification.IdentityValidationResult
     sealed trait Event
-    final case class CustomerAdded(id: CustomerId)                            extends Event
-    final case class CardAdded(customerId: CustomerId, cardId: CardId)        extends Event
-    final case class CardPayed(cardId: CardId, paymentId: PaymentId)          extends Event
-    final case class CardPurchaseMade(cardId: CardId, purchaseId: PurchaseId) extends Event
-    final case class CardPurchaseRejected(reason: String)                     extends Event
+    final case class CustomerAdded(id: CustomerId, result: IdentityValidationResult.Validated.type)
+        extends Event
+    final case class CustomerRejected(
+        newCustomer: NewCustomer,
+        result: IdentityValidationResult.Invalid
+    ) extends Event
+    final case class CardAdded(customerId: CustomerId, cardId: CardId) extends Event
+    final case class CardPayed(cardId: CardId, paymentId: PaymentId)   extends Event
+    final case class CardPurchaseMade(
+        cardId: CardId,
+        purchaseId: PurchaseId,
+        valid: TransactionVerification.ValidCardPurchase.type
+    ) extends Event
+    final case class CardPurchaseRejected(
+        request: CardPurchaseRequest,
+        error: TransactionVerification.ValidationError
+    ) extends Event
   }
 }
