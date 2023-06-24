@@ -1,7 +1,7 @@
 # ICC-2023-06-17
 Iowa Code Camp - Spring 2023
 
-## Type Driven Development in Scala
+## Type Driven Development with Scala (Level 100)
 
 Similar philosophy to Test Driven Development, we instead start with the abstractions and types which make up our algebra and then fill in the implementation/interpreter of that algebra.
 
@@ -33,7 +33,7 @@ modules/type-driven-dev
 
 
 
-## Mocks in Scala
+## Exploration of Mocks in Functional Scala as an Anti-Pattern (Level 200)
 
 Mocks are heavily used in some languages and in certain situations are useful. However they may not be appropriate for a Functional Scala Application. We'll discuss how they negatively affect the code design and some of alternatives which result in code which is easier to test and verify.
 
