@@ -2,7 +2,11 @@
 Iowa Code Camp - Spring 2023
 
 ## Type Driven Development in Scala
-Source found in modules/type-driven-dev
+
+Similar philosophy to Test Driven Development, we instead start with the abstractions and types which make up our algebra and then fill in the implementation/interpreter of that algebra.
+
+### Source
+modules/type-driven-dev
 
 ### Scala
 ### Credit Card Domain
@@ -30,7 +34,12 @@ Source found in modules/type-driven-dev
 
 
 ## Mocks in Scala
-Source found in modules/mocks-in-scala and fakes-in-scala
+
+Mocks are heavily used in some languages and in certain situations are useful. However they may not be appropriate for a Functional Scala Application. We'll discuss how they negatively affect the code design and some of alternatives which result in code which is easier to test and verify.
+
+### Source
+- modules/mocks-in-scala 
+- modules/fakes-in-scala
 
 
 ### Scala
